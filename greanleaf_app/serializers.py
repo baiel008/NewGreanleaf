@@ -25,6 +25,12 @@ class ProductImageSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class FavoriteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Favorite
+        fields = '__all__'
+
+
 class CartSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cart
@@ -46,4 +52,22 @@ class OrderSerializer(serializers.ModelSerializer):
 class OrderItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrderItem
+        fields = '__all__'
+
+
+class PurchaseArchiveSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PurchaseArchive
+        fields = '__all__'
+
+
+class AboutUsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AboutUs
+        fields = '__all__'
+
+
+class ContactSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Contact
         fields = '__all__'

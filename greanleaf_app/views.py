@@ -25,6 +25,12 @@ class ProductImageViewSet(viewsets.ModelViewSet):
     serializer_class = ProductImageSerializer
 
 
+
+class FavoriteViewSet(viewsets.ModelViewSet):
+    queryset = Favorite.objects.all()
+    serializer_class = FavoriteSerializer
+
+
 class CartViewSet(viewsets.ModelViewSet):
     queryset = Cart.objects.all()
     serializer_class = CartSerializer
@@ -43,3 +49,19 @@ class OrderViewSet(viewsets.ModelViewSet):
 class OrderItemViewSet(viewsets.ModelViewSet):
     queryset = OrderItem.objects.all()
     serializer_class = OrderItemSerializer
+
+
+
+class PurchaseArchiveViewSet(viewsets.ModelViewSet):
+    queryset = PurchaseArchive.objects.all()
+    serializer_class = PurchaseArchiveSerializer
+
+
+class AboutUsViewSet(viewsets.ModelViewSet):
+    queryset = AboutUs.objects.all()
+    serializer_class = AboutUsSerializer
+
+
+class ContactViewSet(viewsets.ModelViewSet):
+    queryset = Contact.objects.all()
+    serializer_class = ContactSerializer
