@@ -59,10 +59,11 @@ class Order(models.Model):
         ('confirmed', 'Подтверждён'),
         ('cancelled', 'Отменён'),
     )
-
     first_name = models.CharField(max_length=64)
     last_name = models.CharField(max_length=64)
     phone_number = models.CharField(max_length=20)
+    is_paid = models.BooleanField(default=False)
+    payment_id = models.CharField(max_length=64, blank=True)
     email = models.EmailField()
     comment = models.TextField(blank=True)
     delivery_type = models.CharField(max_length=20, choices=DELIVERY_CHOICES, default='pickup')
