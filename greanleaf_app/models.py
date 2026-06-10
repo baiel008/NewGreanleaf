@@ -69,6 +69,14 @@ class CartItem(models.Model):
     def __str__(self):
         return f'{self.product.product_name} x{self.quantity}'
 
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=['cart', 'product'],
+                name='unique_cart_product'
+            )
+        ]
+
 
 class Order(models.Model):
     DELIVERY_CHOICES = (

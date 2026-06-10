@@ -129,3 +129,5 @@ MEDIA_URL = '/media/'
 
 
 AUTH_USER_MODEL = 'greanleaf_app.UserProfile'
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
