@@ -24,7 +24,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 load_dotenv()
 SECRET_KEY = os.getenv('SECRET_KEY')
-# SECRET_KEY = 'django-insecure-29bi6m6=#mhj7p^8o19an_3o7@of4&s$capvm6chzg&(!n8$o5'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -44,6 +43,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'greanleaf_app',
     "phonenumber_field",
+    'rest_framework_swagger',       # Swagger
+    'drf_yasg'
 ]
 
 MIDDLEWARE = [
