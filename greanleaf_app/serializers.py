@@ -43,6 +43,10 @@ class UserProfileDetailSerializer(serializers.ModelSerializer):
         model = UserProfile
         fields = ['id', 'first_name', 'last_name', 'phone_number', 'email', 'favorites', 'orders', 'archive']
 
+# class ProductDetailSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Product
+#         fields = '__all__'
 
 class ProductImageSerializer(serializers.ModelSerializer):
     class Meta:
@@ -63,11 +67,20 @@ class ProductDetailSerializer(serializers.ModelSerializer):
     # ❌ убрали cart_items   — утечка: любой видит чужие корзины
     # ❌ убрали order_items  — утечка: любой видит чужие заказы
     # ❌ убрали archived_by  — утечка: любой видит историю покупок других
+    similar_products = serializers.SerializerMethodField()  # похожие товары
+
+    def get_similar_products(self, obj):
+        # берём товары из той же категории, исключаем текущий, максимум 6
+        products = Product.objects.filter(
+            category=obj.category,
+            is_available=True
+        ).exclude(id=obj.id)[:6]
+        return ProductListSerializer(products, many=True).data
 
     class Meta:
         model = Product
         fields = ['id', 'product_name', 'article_number', 'description',
-                  'price', 'pv', 'is_available', 'created_at', 'category', 'images']
+                  'price', 'pv', 'is_available', 'created_at', 'category', 'images', 'similar_products']
 
 
 
