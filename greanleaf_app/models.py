@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from phonenumber_field.modelfields import PhoneNumberField
+from django.db.models import Avg
 
 
 class UserProfile(AbstractUser):
@@ -28,6 +29,23 @@ class Product(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products')
     created_at = models.DateTimeField(auto_now_add=True)
 
+    @property
+    def avg_rating(self):
+        avg = self.reviews.aggregate(avg=Avg('rating'))['avg']
+        return round(avg, 1) if avg else 0
+
+    def get_count_rating(self):
+        count = self.reviews.count()
+        return '500+' if count > 500 else count
+
+    @property
+    def good_rate(self):
+        total = self.reviews.count()
+        if total == 0:
+            return '0%'
+        good = self.reviews.filter(rating__gt=3).count()
+        return f'{round((good * 100) / total)}%'
+
     def __str__(self):
         return f'{self.product_name}'
 
@@ -39,17 +57,55 @@ class ProductImage(models.Model):
     def __str__(self):
         return f'{self.product.product_name}'
 
+class Review(models.Model):
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='user_reviews')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='reviews')
+    rating = models.PositiveIntegerField(choices=[(i, str(i)) for i in range(1, 6)])
+    comment = models.TextField(null=True, blank=True)
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='replies')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+
+
+    def is_reply(self):
+        return self.parent is not None
+
+    @property
+    def likes_count(self):
+        return self.likes.count()
+
+    def __str__(self):
+        if self.is_reply():
+            return f"Reply by {self.user.username} to Review {self.parent.id}"
+        return f"Review by {self.user.username} on {self.product.product_name}"
+
+class CommentLike(models.Model):
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    review = models.ForeignKey(Review, on_delete=models.CASCADE, related_name='likes')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('review', 'user')
+
+    def __str__(self):
+        return f'{self.user} - {self.review}'
 
 class Favorite(models.Model):
-    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='favorites')
+    user = models.OneToOneField(UserProfile, on_delete=models.CASCADE, related_name='favorite')
+
+    def __str__(self):
+        return f'{self.user}'
+
+class FavoriteProducts(models.Model):
+    favorite = models.ForeignKey(Favorite, on_delete=models.CASCADE, related_name='favorites')
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='favorited_by')
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ('user', 'product')
+        unique_together = ('favorite', 'product')
 
     def __str__(self):
-        return f'{self.user} — {self.product.product_name}'
+        return f'{self.favorite.user} — {self.product.product_name}'
 
 
 class Cart(models.Model):
