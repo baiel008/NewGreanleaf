@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from phonenumber_field.modelfields import PhoneNumberField
 from django.db.models import Avg
+from multiselectfield import MultiSelectField
+
 
 
 class UserProfile(AbstractUser):
@@ -116,6 +118,10 @@ class Cart(models.Model):
     def __str__(self):
         return f'Cart #{self.session_id}'
 
+    @property
+    def total_price(self):
+        return sum(item.product.price * item.quantity for item in self.items.all())
+
 
 class CartItem(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='items')
@@ -155,11 +161,13 @@ class Order(models.Model):
     email = models.EmailField()
     comment = models.TextField(blank=True)
     delivery_type = models.CharField(max_length=20, choices=DELIVERY_CHOICES, default='pickup')
+    region = models.CharField(max_length=150)
     street = models.CharField(max_length=128, blank=True)
     house = models.CharField(max_length=32, blank=True)
     apartment = models.CharField(max_length=32, blank=True)
     order_status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
     created_at = models.DateTimeField(auto_now_add=True)
+
 
     def __str__(self):
         return f'Order #{self.id} — {self.last_name} {self.first_name}'
@@ -193,6 +201,13 @@ class AboutUs(models.Model):
     def __str__(self):
         return f'{self.title}'
 
+class AboutAsImg(models.Model):
+    about = models.ForeignKey(AboutUs, on_delete=models.CASCADE, related_name='about_images')
+    image = models.ImageField(upload_to='about_images/')
+
+    def __str__(self):
+        return f'{self.about.title}'
+
 
 class Contact(models.Model):
     phone_number = models.CharField(max_length=20)
@@ -203,3 +218,20 @@ class Contact(models.Model):
 
     def __str__(self):
         return f'{self.phone_number}'
+
+class OpeningHours(models.Model):
+    DAY_CHOICES = (
+        ('ПН', 'ПН'),
+        ('ВТ', 'ВТ'),
+        ('СР', 'СР'),
+        ('ЧТ', 'ЧТ'),
+        ('ПТ', 'ПТ'),
+        ('СБ', 'СБ'),
+        ('ВС', 'ВС'),
+    )
+    work_day = MultiSelectField(choices=DAY_CHOICES, max_choices=7)
+    data = models.DateField(auto_now_add=True)
+    description = models.TextField()
+
+    def __str__(self):
+        return f'{self.description}'
