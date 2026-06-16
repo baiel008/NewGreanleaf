@@ -10,6 +10,12 @@ class UserProfile(AbstractUser):
     phone_number = PhoneNumberField(null=True, blank=True)
     email = models.EmailField(unique=True)
 
+    ROLE_CHOICES = (
+        ('seller', 'seller'),
+        ('client', 'client')
+    )
+    user_role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='client')
+
     def __str__(self):
         return f'{self.first_name}, {self.last_name}'
 

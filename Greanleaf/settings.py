@@ -35,6 +35,7 @@ ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'modeltranslation',
+    "jazzmin",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -178,3 +179,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #     "BLACKLIST_AFTER_ROTATION": True,
 #     'AUTH_HEADER_TYPES': ('Bearer',),
 # }
+
+JAZZMIN_SETTINGS = {
+    "site_title": "Admin",
+    "site_header": "Greanleaf",
+    "site_brand": "Greanleaf",
+    "welcome_sign": "Добро пожаловать,",
+    "theme": "darkly",
+}

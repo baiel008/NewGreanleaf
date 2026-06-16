@@ -2,45 +2,45 @@ from rest_framework import generics, status, viewsets
 from .models import *
 from .serializers import *
 from rest_framework.response import Response
-# from rest_framework_simplejwt.views import TokenObtainPairView
-# from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAuthenticated
-#
-#
-#
-# # 🔐 РЕГИСТРАЦИЯ ПОЛЬЗОВАТЕЛЯ
-# class RegisterView(generics.CreateAPIView):
-#     serializer_class = UserProfileSerializer
-#     def create(self, request, *args, **kwargs):
-#         serializer = self.get_serializer(data=request.data)   # Получаем сериализатор с входными данными
-#         serializer.is_valid(raise_exception=True)                    # Проверяет ошибку если не правильно
-#         user = serializer.save()                                                          # Сохраняем пользователя (должен быть вызов create_user внутри сериализатора!)
-#         return Response(serializer.data, status=status.HTTP_201_CREATED)
-#
-# # 🔐 КАСТОМНЫЙ ЛОГИН С JWT
-# class CustomLoginView(TokenObtainPairView):             # Наследование TokenObtainPairView алып атат
-#     serializer_class = LoginSerializer
-#
-#     def post(self, request, *args, **kwargs):
-#         serializer = self.get_serializer(data=request.data)   # Получаем сериализатор с логин-данными
-#         try:
-#             serializer.is_valid(raise_exception=True)                # Пробуем валидировать
-#         except Exception:
-#             return Response({'detail': 'Неверные учетные данные'}, status=status.HTTP_401_UNAUTHORIZED)
-#
-#         user = serializer.validated_data                                         # Здесь — уже валидные данные и токены
-#         return Response(serializer.data, status=status.HTTP_200_OK)
-#
-# # 🔐 ВЫХОД ИЗ СИСТЕМЫ (ОТЗЫВ refresh-токена)
-# class LogoutView(generics.GenericAPIView):                     # GenericAPIView, потому что не нужен CRUD, только POST
-#     def post(self, request, *args, **kwargs):
-#         try:
-#             refresh_token = request.data['refresh']                       # Получаем refresh токен из тела запроса
-#             token = RefreshToken(refresh_token)                        # Оборачиваем в специальный объект токена
-#             token.blacklist()  # Помещаем токен в чёрный список (требуется настройка!)
-#             return Response(status=status.HTTP_205_RESET_CONTENT)
-#         except Exception:
-#             return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+
+# 🔐 РЕГИСТРАЦИЯ ПОЛЬЗОВАТЕЛЯ
+class RegisterView(generics.CreateAPIView):
+    serializer_class = UserProfileSerializer
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)   # Получаем сериализатор с входными данными
+        serializer.is_valid(raise_exception=True)                    # Проверяет ошибку если не правильно
+        user = serializer.save()                                                          # Сохраняем пользователя (должен быть вызов create_user внутри сериализатора!)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+# 🔐 КАСТОМНЫЙ ЛОГИН С JWT
+class CustomLoginView(TokenObtainPairView):             # Наследование TokenObtainPairView алып атат
+    serializer_class = LoginSerializer
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)   # Получаем сериализатор с логин-данными
+        try:
+            serializer.is_valid(raise_exception=True)                # Пробуем валидировать
+        except Exception:
+            return Response({'detail': 'Неверные учетные данные'}, status=status.HTTP_401_UNAUTHORIZED)
+
+        user = serializer.validated_data                                         # Здесь — уже валидные данные и токены
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+# 🔐 ВЫХОД ИЗ СИСТЕМЫ (ОТЗЫВ refresh-токена)
+class LogoutView(generics.GenericAPIView):                     # GenericAPIView, потому что не нужен CRUD, только POST
+    def post(self, request, *args, **kwargs):
+        try:
+            refresh_token = request.data['refresh']                       # Получаем refresh токен из тела запроса
+            token = RefreshToken(refresh_token)                        # Оборачиваем в специальный объект токена
+            token.blacklist()  # Помещаем токен в чёрный список (требуется настройка!)
+            return Response(status=status.HTTP_205_RESET_CONTENT)
+        except Exception:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
 # ─── UserProfile ───────────────────────────────────────────────────────────────
 

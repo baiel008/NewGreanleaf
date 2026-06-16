@@ -37,9 +37,9 @@ router = routers.DefaultRouter()
 
 urlpatterns = [
     path('', include(router.urls)),
-    # path('register/', RegisterView.as_view(), name='register'),
-    # path('login/', CustomLoginView.as_view(), name='login'),
-    # path('logout/', LogoutView.as_view(), name='logout'),
+    path('register/', RegisterView.as_view(), name='register'),
+    path('login/', CustomLoginView.as_view(), name='login'),
+    path('logout/', LogoutView.as_view(), name='logout'),
 
 
     # ─── UserProfile ───────────────────────────────────────────────────────────
@@ -54,7 +54,7 @@ urlpatterns = [
 
     # ─── Product ───────────────────────────────────────────────────────────────
     path('products/', ProductListAPIView.as_view(), name='product_list'),
-    path('products/create/', ProductCreateAPIView.as_view(), name='product_create'),
+    path('products/ /', ProductCreateAPIView.as_view(), name='product_create'),
     path('products/<int:pk>/', ProductDetailAPIView.as_view(), name='product_detail'),
 
 
