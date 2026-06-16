@@ -170,7 +170,7 @@ class OrderItemDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
 
 # ─── PurchaseArchive ───────────────────────────────────────────────────────────
 
-class PurchaseArchiveListAPIView(generics.ListAPIView):
+class PurchaseArchiveListAPIView(generics.ListCreateAPIView):
     serializer_class = PurchaseArchiveSerializer
 
     def get_queryset(self):
@@ -180,7 +180,7 @@ class PurchaseArchiveListAPIView(generics.ListAPIView):
         ).select_related('product', 'order').order_by('-created_at')
 
 
-class PurchaseArchiveDetailAPIView(generics.RetrieveAPIView):
+class PurchaseArchiveDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = PurchaseArchiveSerializer
     permission_classes = [IsAuthenticated]
 
