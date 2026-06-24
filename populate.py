@@ -3,10 +3,10 @@
 import os
 import django
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Greanleaf.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Greenleaf.settings')
 django.setup()
 
-from greanleaf_app.models import Category, Product, AboutUs, Contact
+from greenleaf_app.models import Category, Product, AboutUs, Contact
 
 # Category
 categories = [

@@ -41,6 +41,9 @@ urlpatterns = [
     path('login/', CustomLoginView.as_view(), name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),
 
+    path('password_reset/verify_code/', verify_reset_code, name='verify_reset_code'),
+
+
 
     # ─── UserProfile ───────────────────────────────────────────────────────────
     path('users/', UserProfileListAPIView.as_view(), name='user_list'),
